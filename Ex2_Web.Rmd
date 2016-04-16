@@ -1,0 +1,118 @@
+---
+title: <span style="color:crimson">*Development Credit Authority (DCA) Data Set  Loan Transactions*</span>
+author: "Author: Bareket Karif"
+date: "Date: 5 באפריל 2016"
+output: html_document
+---
+#### *[Data source](http://catalog.data.gov/dataset/development-credit-authority-dca-data-set-loan-transactions)*  
+___ 
+
+```{r set-options, echo=FALSE, cache=FALSE}
+options(width = 200)
+```
+
+
+### <span style="color:darkorange">*Date Description:*</span>  
+USAID's Development Credit Authority (DCA) works with investors, local financial institutions, and development organizations to design and deliver investment alternatives that unlock financing for U.S. Government priorities. USAID guarantees encourage private lenders to extend financing to underserved borrowers in new sectors and regions. This dataset is the complete list of all private loans made under USAID's DCA since it was established in 1999. To protect the personal information of borrowers and bank partners, all strategic and personal identifiable information was removed.  
+  
+___
+
+### <span style="color:darkorange">*Data Example - First data record:*</span>  
+```{r include= TRUE, echo=FALSE}
+library("downloader")
+file<-".\\data\\userssharedsdfusaiddevelopmentcagloantransactions.csv"
+if(!file.exists(file)){
+  fileURL <- "http://www.usaid.gov/opengov/developer/datasets/userssharedsdfusaiddevelopmentcagloantransactions.csv"
+  download.file(fileURL, destfile = file)
+  dateDownloaded <- date()
+  dateDownloaded
+}
+pollution <- read.csv(file, sep = ",",header = T, row.names=NULL)[,c(2,4,6,13:16)]
+head(pollution)
+```
+
+**description of the relevant filds:**  
+  
+- **Transaction Report ID** - is the unique number of transaction report  
+- **Amount (USD)** - is the amount of the loan  
+- **End Date** - is the last date the money need to come back  
+- **Latitude** - is the latitude of the borrower  
+- **Longitude** - is the longitude of the borrower   
+- **Is Woman Owned?** - tell us if the owner is woman   
+- **Is First Time Borrower?** - tell us if it's the first time of a borrower  
+
+
+___
+### <span style="color:darkorange">*Analysis of the data by various criteria*</span>  
+
+#### The graph describe the **gender** of the owner - **woman/man**
+```{r include= TRUE, echo=FALSE, warning=FALSE}
+# Pie Chart from data frame with Appended Sample Sizes
+gender <- table(pollution[,6])
+Owner<-c('Men','Women')
+lbls <- paste(Owner, "\n", gender, sep="")
+pie(gender, labels = lbls, main="The gender of the owner",col=c('steelblue','violet'))  
+```  
+  
+From this graph we can learn that **most of the owners is men**. 
+This result is not surprising because in most cases men are at management position.  
+  
+___
+  
+#### The graph describe if it's the **first time of a borrower**
+
+```{r include= TRUE, echo=FALSE, warning=FALSE}
+# Simple Bar Plot 
+counts <- table(pollution[,7])
+First_Time<-c('No','Yes')
+barplot(counts, main="Is First Time Borrower?", horiz=TRUE,
+  names.arg=c("No", "Yes"), col=c('steelblue','violet'))  
+```  
+  
+From this graph we can learn that most of people borrow's more then one time.
+This result is not surprising, because people does not calculate the exact amount they will need correctly, and thus need an extra money loan.  
+  
+  
+  
+___  
+  
+#### map
+```{r include= TRUE, echo=FALSE, warning=FALSE}
+#display results on a map
+library(ggplot2)
+library(ggmap)
+# Keep the lon and lat data
+Longitude<-pollution$Longitude
+Longitude<-Longitude[!is.na(Longitude)]
+
+Latitude<-pollution$Latitude
+Latitude<-Latitude[!is.na(Latitude)]
+
+# getting the map
+map <- get_map(location = c(Longitude = mean(Longitude), Latitude = mean(Latitude)), zoom = 4, maptype = "satellite", scale = 2)
+
+# plotting the map with some points on it
+ggmap(map) +
+  geom_point(data = pollution, aes(x = Longitude, y = Latitude, col = "location", alpha = 0.1), size = 4, shape = 3) +  guides(fill=FALSE, alpha=FALSE, size=FALSE)  
+```  
+  
+from this map we can learn about the borrower location
+  
+___
+
+### <span style="color:darkorange">*Summary of Conclusions and Recommendations for Further Research*</span>  
+
+##### here we can see the statistics of the **amount** of the loan#####
+```{r echo=FALSE}
+summary(pollution[,c(2)])
+```
+From this graph we can learn that most of the people borrow's About 20,000.  
+  
+
+In conclusion, this report shows that private lenders have common features, such as gender of the owner and the number of times the borrower borrow's.
+
+my recommendation for further research, is to use the information collected in this report, and to check the probability of a borrower to be a man/woman.
+In addition,  to check if the investment is worthwhile, i.e, checking if the borrower is worth investing in. finally, investigate if there is a connection between to of the above.  
+  
+   
+  
