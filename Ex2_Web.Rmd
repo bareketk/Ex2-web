@@ -112,7 +112,7 @@ From this graph we can learn that most of the people borrow's About 20,000.
 In conclusion, this report shows that private lenders have common features, such as gender of the owner and the number of times the borrower borrow's.
 
 my recommendation for further research, is to use the information collected in this report, and to check the probability of a borrower to be a man/woman.
-In addition,  to check if the investment is worthwhile, i.e, checking if the borrower is worth investing in. finally, investigate if there is a connection between to of the above.  
+In addition,  to check if the investment is worthwhile, i.e, checking if the borrower is worth investing in. finally, investigate if there is a connection between the two of the above.  
   
    
   
